@@ -10,12 +10,19 @@ namespace SampleCode
 	{
 		static void Main(string[] args)
 		{
-			string url = "URL TO BE SCAN";
+			string[] URLs = new string[]{
+					"http://www.url.com/Your_page",
+					"http://www.url.com/Your_page2",
+					"http://www.url.com/Your_page3"
+				};
 			LoginToken token;
 			try
 			{
 				token = Login("<YOUR_USER_NAME>", "<YOUR_API_KEY>");
-				Scan(token, url);
+				foreach (var url in URLs)
+				{
+					Scan(token, url);
+				}
 			}
 			catch (Exception ex)
 			{
