@@ -10,6 +10,7 @@ namespace Copyleaks.SDK.API.Extentions
 			client.BaseAddress = UsersAuthentication.SERVICE_URL;
 			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(contentType));
+			client.DefaultRequestHeaders.UserAgent.ParseAdd("CopyleaksSDK/1.0");
 		}
 		internal static void SetCopyleaksClient(this HttpClient client, string contentType, LoginToken SecurityToken)
 		{

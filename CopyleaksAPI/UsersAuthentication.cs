@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using Copyleaks.SDK.API.Properties;
 using Newtonsoft.Json;
+using Copyleaks.SDK.API.Extentions;
+using Copyleaks.SDK.API.Exceptions;
+using Copyleaks.SDK.API.Models.Responses;
 
 namespace Copyleaks.SDK.API
 {
@@ -23,25 +27,39 @@ namespace Copyleaks.SDK.API
 		public static LoginToken Login(string username, string apiKey)
 		{
 			if (string.IsNullOrEmpty(username))
-				throw new ArgumentException("Cannot be empty!", "username"); // ALON
+				throw new ArgumentException("Username is mandatory.", "username");
 			else if (string.IsNullOrEmpty(apiKey))
-				throw new ArgumentException("Cannot be empty!", "password"); // ALON
+				throw new ArgumentException("Password is mandatory.", "password");
 
 			LoginToken token;
-			using (WebClient client = new WebClient())
+			using (HttpClient client = new HttpClient())
 			{
-				client.Headers.Add(HttpRequestHeader.UserAgent, "CopyleaksSDK/1.0");
-				client.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-				string json = client.UploadString(
-					SERVICE_URL + "Token",
-					string.Format("username={0}&password={1}&grant_type=password", username, apiKey)
-				);
+				client.SetCopyleaksClient(ContentType.UrlEncoded);
+				HttpResponseMessage msg = client.PostAsync("Token", new FormUrlEncodedContent(new[] 
+					{
+						new KeyValuePair<string, string>("username", username),
+						new KeyValuePair<string, string>("password", apiKey),
+						new KeyValuePair<string, string>("grant_type", "password")
+					})).Result;
+
+				if (!msg.IsSuccessStatusCode)
+				{
+					string errorResponse = msg.Content.ReadAsStringAsync().Result;
+					BadLoginResponse response = JsonConvert.DeserializeObject<BadLoginResponse>(errorResponse);
+					if (response == null)
+						throw new JsonException("Unable to process server response.");
+					else
+						throw new CommandFailedException(response.Description, msg.StatusCode);
+				}
+
+				string json = msg.Content.ReadAsStringAsync().Result;
+
 				if (string.IsNullOrEmpty(json))
-					throw new JsonException("Server return empty string. Probably, bad request sent."); // ALON
+					throw new JsonException("This request could not be processed.");
 
 				token = JsonConvert.DeserializeObject<LoginToken>(json);
 				if (token == null)
-					throw new JsonException("Unable to parse server response."); // ALON
+					throw new JsonException("Unable to process server response.");
 			}
 
 			return token;

@@ -18,7 +18,7 @@ namespace Copyleaks.SDK.API
 		#region Members & Properties
 
 		[JsonProperty(PropertyName = "access_token")]
-		internal string Token { get; set; }
+		public string Token { get; private set; }
 
 		[JsonProperty(PropertyName = ".issued")]
 		public DateTime Issued { get; private set; }
@@ -42,6 +42,11 @@ namespace Copyleaks.SDK.API
 		{
 			if (DateTime.UtcNow > this.Expire)
 				throw new UnauthorizedAccessException(string.Format("This token expired on {0}", this.Expire));
+		}
+
+		public override string ToString()
+		{
+			return this.Token;
 		}
 	}
 }

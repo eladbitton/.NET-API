@@ -23,8 +23,16 @@ namespace Copyleaks.SDK.API
 			this.Token = token;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="url"></param>
+		/// <exception cref="UnauthorizedAccessException"></exception>
+		/// <returns></returns>
 		public async Task<ScannerProcess> CreateProcessAsync(string url)
 		{
+			this.Token.Validate();
+
 			using (HttpClient client = new HttpClient())
 			{
 				client.SetCopyleaksClient(ContentType.Json, this.Token);
@@ -38,76 +46,60 @@ namespace Copyleaks.SDK.API
 
 				HttpResponseMessage msg = await client.PostAsync("detector/create", content);
 
-				
-
-				//string json = client.UploadString(string.Format("{0}detector/create", UsersAuthentication.SERVICE_URL),
-				//		JsonConvert.SerializeObject(req));
-
 				if (!msg.IsSuccessStatusCode)
-					throw new CommandFailedException(msg.ReasonPhrase, msg.StatusCode);
+				{
+					var errorJson = await msg.Content.ReadAsStringAsync();
+					var errorObj = JsonConvert.DeserializeObject<BadResponse>(errorJson);
+					if (errorObj == null)
+						throw new CommandFailedException(msg.StatusCode);
+					else
+						throw new CommandFailedException(errorObj.Message, msg.StatusCode);
+				}
 
 				string json = await msg.Content.ReadAsStringAsync();
-				//return JsonConvert.DeserializeObject<ResultRecord[]>(json);
 
 				CreateResourceResponse response = JsonConvert.DeserializeObject<CreateResourceResponse>(json);
 				return new ScannerProcess(this.Token, response.ProcessId);
 			}
 		}
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="url"></param>
+		/// <exception cref="UnauthorizedAccessException"></exception>
+		/// <returns></returns>
+		public ScannerProcess CreateProcess(string url)
+		{
+			this.Token.Validate();
 
-		//public bool IsCompleted(Guid processId)
-		//{
-		//	using (WebClient client = new WebClient())
-		//	{
-		//		client.Headers[HttpRequestHeader.ContentType] = "application/json";
-		//		client.Headers.Add("Authorization", string.Format("{0} {1}", "Bearer", this.Token.Token));
+			using (HttpClient client = new HttpClient())
+			{
+				client.SetCopyleaksClient(ContentType.Json, this.Token);
 
-		//		// TODO : delete
-		//		//CheckStatusRequest request = new CheckStatusRequest() { CommandId = commandId };
+				CreateCommandRequest req = new CreateCommandRequest() { URL = url };
 
+				HttpContent content = new StringContent(
+					JsonConvert.SerializeObject(req),
+					Encoding.UTF8,
+					ContentType.Json);
 
-		//		string json = client.DownloadString(string.Format("{0}Detector/{1}/Status", UsersAuthentication.SERVICE_URL, processId));
+				HttpResponseMessage msg = client.PostAsync("detector/create", content).Result;
 
-		//		CheckStatusResponse response = JsonConvert.DeserializeObject<CheckStatusResponse>(json);
-		//		return response.Status == "Finished";
-		//	}
-		//}
+				if (!msg.IsSuccessStatusCode)
+				{
+					var errorJson = msg.Content.ReadAsStringAsync().Result;
+					var errorObj = JsonConvert.DeserializeObject<BadResponse>(errorJson);
+					if (errorObj == null)
+						throw new CommandFailedException(msg.StatusCode);
+					else
+						throw new CommandFailedException(errorObj.Message, msg.StatusCode);
+				}
 
-		//public ResultRecord[] GetResults(Guid processId)
-		//{
-		//	using (WebClient client = new WebClient())
-		//	{
-		//		client.Headers[HttpRequestHeader.ContentType] = "application/json";
-		//		client.Headers.Add("Authorization", string.Format("{0} {1}", "Bearer", this.Token.Token));
+				string json = msg.Content.ReadAsStringAsync().Result;
 
-		//		string json = client.DownloadString(string.Format("{0}Detector/{1}/Result", UsersAuthentication.SERVICE_URL, processId));
-
-		//		return JsonConvert.DeserializeObject<ResultRecord[]>(json);
-		//	}
-		//}
-
-		//public string Work()
-		//{
-		//	using (AdvancedWebClient client = new AdvancedWebClient())
-		//	{
-		//		client.Headers[HttpRequestHeader.ContentType] = "application/json";
-		//		client.Headers.Add("Authorization", string.Format("{0} {1}", "Bearer", this.Token.Token));
-		//		return client.UploadString(UsersAuthentication.SERVICE_URL + "Detector", "");
-		//	}
-		//}
-
-		//public async Task<ResultRecord[]> DetectCopiesAsync(string url)
-		//{
-		//	using (WebClient client = new WebClient())
-		//	{
-		//		client.Headers[HttpRequestHeader.ContentType] = "application/json";
-		//		client.Headers.Add("Authorization",
-		//			string.Format("{0} {1}", "Bearer", this.Token.Token));
-		//		string json = await client.DownloadStringTaskAsync(string.Format("{0}Detector/Detect?URL={1}",
-		//				UsersAuthentication.SERVICE_URL,
-		//				Uri.EscapeUriString(url)));
-
-		//		return JsonConvert.DeserializeObject<ResultRecord[]>(json);
-		//	}
-		//}
+				CreateResourceResponse response = JsonConvert.DeserializeObject<CreateResourceResponse>(json);
+				return new ScannerProcess(this.Token, response.ProcessId);
+			}
+		}
 	}
 }

@@ -2,16 +2,16 @@
 <package >
   <metadata>
     <id>CopyleaksAPI</id>
-    <version>1.0.0.3</version>
+    <version>1.0.0.5</version>
     <title>Copyleaks API</title>
     <authors>Copyleaks LTD</authors>
 	<owners>Copyleaks LTD</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>description</description>
-    <copyright>Copyright 2015</copyright>
-    <tags>Plagiarism Copyright Copyrights copy Copyleaks</tags>
+    <licenseUrl>https://copyleaks.com/Legal/TermsOfUse</licenseUrl>
+    <projectUrl>https://github.com/Copyleaks/API/tree/master/CopyleaksAPI</projectUrl>
+    <iconUrl>https://copyleaks.com/content/images/nuget/copyleaks-icon-32.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Copyleaks is a popular advanced online plagiarism checker. This library provides access to Copyleaks cloud and scan your content for copyright infringement.</description>
+    <copyright>All rights reserved to Copyleaks Ltd.</copyright>
+    <tags>plagiarism copyright copyrights Copyleaks infringement checker detector</tags>
   </metadata>
 </package>

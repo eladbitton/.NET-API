@@ -1,70 +1,74 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Copyleaks.SDK.API;
-using Copyleaks.SDK.API.Models;
+using Copyleaks.SDK.API.Exceptions;
 
-namespace SampleCode
+namespace Copyleaks.SDK.SampleCode
 {
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			string[] URLs = new string[]{
-					"http://www.url.com/Your_page",
-					"http://www.url.com/Your_page2",
-					"http://www.url.com/Your_page3"
-				};
-			LoginToken token;
+			// Creating Copyleaks account: https://copyleaks.com/Account/Signup
+			// Use your account information:
+			string username = "<Username>";
+			string APIKey = "<API KEY>"; // Generate your API Key: https://copyleaks.com/Account/Manage
+
+			string url_to_scan = "http://www.website.com/document-to-scan"; // Allowed formats: html, pdf, doc, docx, rtf, txt ...
+
 			try
 			{
-				token = Login("<YOUR_USER_NAME>", "<YOUR_API_KEY>");
-				foreach (var url in URLs)
-				{
-					Scan(token, url);
-				}
+				Scan(username, APIKey, url_to_scan);
+			}
+			catch (UnauthorizedAccessException e)
+			{
+				Console.WriteLine("\tFailed!");
+				Console.WriteLine("+Error Description:");
+				Console.WriteLine("{0}", e.Message);
+			}
+			catch (CommandFailedException theError)
+			{
+				Console.WriteLine("\tFailed!");
+				Console.WriteLine("+Error Description:");
+				Console.WriteLine("{0}", theError.Message);
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("Exception");
+				Console.WriteLine("\tFailed!");
+				Console.WriteLine("Unhandled Exception");
 				Console.WriteLine(ex);
 			}
-
-			Console.WriteLine();
-			Console.WriteLine("Press any key to continue...");
-			Console.ReadKey();
 		}
 
-		private static LoginToken Login(string username, string apiKey)
+		private static void Scan(string username, string apiKey, string url)
 		{
-			Console.Write("Log-in to Copyleaks server...\t\t");
+			// Login to Copyleaks server.
+			Console.Write("User login... ");
 			LoginToken token = UsersAuthentication.Login(username, apiKey);
-			Console.WriteLine("Done!");
-			return token;
-		}
+			// This security token can be use multiple times, untill it will be expired (14 days).
+			Console.WriteLine("\t\t\tSuccess!");
 
-		private static void Scan(LoginToken token, string url)
-		{
-			Detector detector;
-			ScannerProcess process;
+			// Create a new process on server.
+			Console.Write("Submiting new request... ");
+			Detector detector = new Detector(token);
+			ScannerProcess process = detector.CreateProcess(url);
+			Console.WriteLine("\tSuccess!");
 
-			Console.Write("Creating new process on server...\t");
-			detector = new Detector(token);
-			process = detector.CreateProcessAsync(url).Result;
-			Console.WriteLine("Done!");
-
-			Console.Write("Waiting for process completion...\t");
-			while (!process.IsCompletedAsync().Result)
+			// Waiting to process to be finished.
+			Console.Write("Waiting for completion... ");
+			while (!process.IsCompleted())
 				Thread.Sleep(1000);
-			Console.WriteLine("Done!");
+			Console.WriteLine("\tSuccess!");
 
-			Console.Write("Getting resutls... ");
-			ResultRecord[] results;
-			results = process.GetResultsAsync().Result;
-
+			// Getting results.
+			Console.Write("Getting results... ");
+			var results = process.GetResults();
 			if (results.Length == 0)
-				Console.WriteLine("No results.");
+			{
+				Console.WriteLine("\tNo results.");
+			}
 			else
+			{
 				for (int i = 0; i < results.Length; ++i)
 				{
 					Console.WriteLine();
@@ -74,11 +78,7 @@ namespace SampleCode
 					Console.WriteLine("Precents: {0}", results[i].Precents);
 					Console.WriteLine("CopiedWords: {0}", results[i].NumberOfCopiedWords);
 				}
-
-			Console.WriteLine();
-			Console.Write("Deleting process '{0}'...\t", process.Id);
-			process.DeleteAsync();
-			Console.WriteLine("Done!");
+			}
 		}
 	}
 }
