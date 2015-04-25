@@ -125,4 +125,8 @@
     <value>https://api.copyleaks.com/</value>
     <comment>Service URL</comment>
   </data>
+  <data name="ServiceVersion" xml:space="preserve">
+    <value>v1</value>
+    <comment>Current version of the API</comment>
+  </data>
 </root>

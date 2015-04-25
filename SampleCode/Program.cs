@@ -5,7 +5,7 @@ using Copyleaks.SDK.API.Exceptions;
 
 namespace Copyleaks.SDK.SampleCode
 {
-	class Program
+	public class Program
 	{
 		static void Main(string[] args)
 		{
@@ -40,7 +40,7 @@ namespace Copyleaks.SDK.SampleCode
 			}
 		}
 
-		private static void Scan(string username, string apiKey, string url)
+		public static void Scan(string username, string apiKey, string url)
 		{
 			// Login to Copyleaks server.
 			Console.Write("User login... ");

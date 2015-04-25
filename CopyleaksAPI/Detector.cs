@@ -10,6 +10,7 @@ using Copyleaks.SDK.API.Extentions;
 using Copyleaks.SDK.API.Models;
 using Copyleaks.SDK.API.Models.Requests;
 using Copyleaks.SDK.API.Models.Responses;
+using Copyleaks.SDK.API.Properties;
 using Newtonsoft.Json;
 
 namespace Copyleaks.SDK.API
@@ -44,7 +45,7 @@ namespace Copyleaks.SDK.API
 					Encoding.UTF8,
 					ContentType.Json);
 
-				HttpResponseMessage msg = await client.PostAsync("detector/create", content);
+				HttpResponseMessage msg = await client.PostAsync(Resources.ServiceVersion + "/detector/create", content);
 
 				if (!msg.IsSuccessStatusCode)
 				{
@@ -83,7 +84,7 @@ namespace Copyleaks.SDK.API
 					Encoding.UTF8,
 					ContentType.Json);
 
-				HttpResponseMessage msg = client.PostAsync("detector/create", content).Result;
+				HttpResponseMessage msg = client.PostAsync(Resources.ServiceVersion + "/detector/create", content).Result;
 
 				if (!msg.IsSuccessStatusCode)
 				{

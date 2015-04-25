@@ -11,6 +11,7 @@ using Copyleaks.SDK.API.Models;
 using Copyleaks.SDK.API.Models.Responses;
 using Copyleaks.SDK.API.Extentions;
 using Newtonsoft.Json;
+using Copyleaks.SDK.API.Properties;
 
 namespace Copyleaks.SDK.API
 {
@@ -43,7 +44,7 @@ namespace Copyleaks.SDK.API
 			{
 				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
 
-				HttpResponseMessage msg = await client.GetAsync(string.Format("detector/{0}/status", this.PID));
+				HttpResponseMessage msg = await client.GetAsync(string.Format("{0}/detector/{1}/status", Resources.ServiceVersion, this.PID));
 				if (!msg.IsSuccessStatusCode)
 				{
 					string errorResponse = await msg.Content.ReadAsStringAsync();
@@ -74,7 +75,7 @@ namespace Copyleaks.SDK.API
 			{
 				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
 
-				HttpResponseMessage msg = client.GetAsync(string.Format("detector/{0}/status", this.PID)).Result;
+				HttpResponseMessage msg = client.GetAsync(string.Format("{0}/detector/{1}/status", Resources.ServiceVersion, this.PID)).Result;
 				if (!msg.IsSuccessStatusCode)
 				{
 					string errorResponse = msg.Content.ReadAsStringAsync().Result;
@@ -107,7 +108,7 @@ namespace Copyleaks.SDK.API
 			{
 				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
 
-				HttpResponseMessage msg = await client.GetAsync(string.Format("detector/{0}/result", this.PID));
+				HttpResponseMessage msg = await client.GetAsync(string.Format("{0}/detector/{1}/result", Resources.ServiceVersion, this.PID));
 				if (!msg.IsSuccessStatusCode)
 				{
 					string errorResponse = msg.Content.ReadAsStringAsync().Result;
@@ -136,7 +137,7 @@ namespace Copyleaks.SDK.API
 			{
 				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
 
-				HttpResponseMessage msg = client.GetAsync(string.Format("detector/{0}/result", this.PID)).Result;
+				HttpResponseMessage msg = client.GetAsync(string.Format("{0}/detector/{1}/result", Resources.ServiceVersion, this.PID)).Result;
 				if (!msg.IsSuccessStatusCode)
 				{
 					string errorResponse = msg.Content.ReadAsStringAsync().Result;

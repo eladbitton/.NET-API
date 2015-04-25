@@ -77,5 +77,14 @@ namespace Copyleaks.SDK.API.Properties {
                 return ResourceManager.GetString("ServiceEntryPoint", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to v1.
+        /// </summary>
+        internal static string ServiceVersion {
+            get {
+                return ResourceManager.GetString("ServiceVersion", resourceCulture);
+            }
+        }
     }
 }
