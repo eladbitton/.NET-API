@@ -10,6 +10,7 @@ using Copyleaks.SDK.API.Extentions;
 using Copyleaks.SDK.API.Exceptions;
 using Copyleaks.SDK.API.Models.Responses;
 using System.Threading.Tasks;
+using Copyleaks.SDK.API.Models.Responses.Copyleaks.SDK.API.Models.Responses;
 
 namespace Copyleaks.SDK.API
 {
