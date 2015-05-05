@@ -10,7 +10,7 @@
     <projectUrl>https://github.com/Copyleaks/API/tree/master/CopyleaksAPI</projectUrl>
     <iconUrl>https://copyleaks.com/content/images/nuget/copyleaks-icon-32.png</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <description>Copyleaks is a popular advanced online plagiarism checker. This library provides access to Copyleaks cloud and scan your content for copyright infringement.</description>
+    <description>Copyleaks is a popular advanced online plagiarism checker. This library provides access to Copyleaks cloud and scans your content for copyright infringement.</description>
     <copyright>All rights reserved to Copyleaks Ltd.</copyright>
     <tags>plagiarism copyright copyrights Copyleaks infringement checker detector</tags>
   </metadata>

@@ -1,1 +1,1 @@
-﻿$DTE.ItemOperations.Navigate("https://api.copyleaks.com/Guides/NugetHowToUse?ver=" + $package.Version)
+﻿$DTE.ItemOperations.Navigate("https://api.copyleaks.com/Guides/NugetHowToUse")

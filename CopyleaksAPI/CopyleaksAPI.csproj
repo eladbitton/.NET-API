@@ -70,6 +70,7 @@
     <Compile Include="Models\Responses\BadLoginResponse.cs" />
     <Compile Include="Models\Responses\BadResponse.cs" />
     <Compile Include="Models\Responses\CheckStatusResponse.cs" />
+    <Compile Include="Models\Responses\CountCreditsResponse.cs" />
     <Compile Include="Models\Responses\CreateResourceResponse.cs" />
     <Compile Include="Models\ResultRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
