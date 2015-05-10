@@ -29,10 +29,12 @@ namespace Copyleaks.SDK.API
 		/// <exception cref="JsonException">ALON</exception>
 		public static LoginToken Login(string username, string apiKey)
 		{
+#if !DEBUG // For testing purposes
 			if (string.IsNullOrEmpty(username))
 				throw new ArgumentException("Username is mandatory.", "username");
 			else if (string.IsNullOrEmpty(apiKey))
 				throw new ArgumentException("Password is mandatory.", "password");
+#endif
 
 			LoginToken token;
 			using (HttpClient client = new HttpClient())
@@ -51,7 +53,7 @@ namespace Copyleaks.SDK.API
 					if (response == null)
 						throw new JsonException("Unable to process server response.");
 					else
-						throw new CommandFailedException(response.Description, msg.StatusCode);
+						throw new CommandFailedException(response.Message, msg.StatusCode);
 				}
 
 				string json = msg.Content.ReadAsStringAsync().Result;
@@ -92,7 +94,7 @@ namespace Copyleaks.SDK.API
 					if (response == null)
 						throw new JsonException("Unable to process server response.");
 					else
-						throw new CommandFailedException(response.Description, msg.StatusCode);
+						throw new CommandFailedException(response.Message, msg.StatusCode);
 				}
 
 				string json = await msg.Content.ReadAsStringAsync();
@@ -128,7 +130,7 @@ namespace Copyleaks.SDK.API
 					if (response == null)
 						throw new JsonException("Unable to process server response.");
 					else
-						throw new CommandFailedException(response.Description, msg.StatusCode);
+						throw new CommandFailedException(response.Message, msg.StatusCode);
 				}
 
 				string json = msg.Content.ReadAsStringAsync().Result;
@@ -164,7 +166,7 @@ namespace Copyleaks.SDK.API
 					if (response == null)
 						throw new JsonException("Unable to process server response.");
 					else
-						throw new CommandFailedException(response.Description, msg.StatusCode);
+						throw new CommandFailedException(response.Message, msg.StatusCode);
 				}
 
 				string json = await msg.Content.ReadAsStringAsync();
