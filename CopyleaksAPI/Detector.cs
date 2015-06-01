@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,6 +26,7 @@ namespace Copyleaks.SDK.API
 			this.Token = token;
 		}
 
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -40,12 +43,30 @@ namespace Copyleaks.SDK.API
 
 				CreateCommandRequest req = new CreateCommandRequest() { URL = url };
 
-				HttpContent content = new StringContent(
-					JsonConvert.SerializeObject(req),
-					Encoding.UTF8,
-					ContentType.Json);
+				HttpResponseMessage msg;
+				if (File.Exists(url))
+				{
+					FileInfo localFile = new FileInfo(url);
+					// Local file. Need to upload it to the server.
 
-				HttpResponseMessage msg = await client.PostAsync(Resources.ServiceVersion + "/detector/create", content);
+					using (var content = new MultipartFormDataContent("Upload----" + DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)))
+					{
+						using (FileStream stream = File.OpenRead(url))
+						{
+							content.Add(new StreamContent(stream, (int)stream.Length), "document", Path.GetFileName(url));
+							msg = client.PostAsync(Resources.ServiceVersion + "/detector/create-by-file", content).Result;
+						}
+					}
+				}
+				else
+				{
+					// Internet path. Just submit it to the server.
+					HttpContent content = new StringContent(
+						JsonConvert.SerializeObject(req),
+						Encoding.UTF8,
+						ContentType.Json);
+					msg = client.PostAsync(Resources.ServiceVersion + "/detector/create-by-url", content).Result;
+				}
 
 				if (!msg.IsSuccessStatusCode)
 				{
@@ -63,6 +84,7 @@ namespace Copyleaks.SDK.API
 				return new ScannerProcess(this.Token, response.ProcessId);
 			}
 		}
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -79,12 +101,30 @@ namespace Copyleaks.SDK.API
 
 				CreateCommandRequest req = new CreateCommandRequest() { URL = url };
 
-				HttpContent content = new StringContent(
-					JsonConvert.SerializeObject(req),
-					Encoding.UTF8,
-					ContentType.Json);
+				HttpResponseMessage msg;
+				if (File.Exists(url))
+				{
+					FileInfo localFile = new FileInfo(url);
+					// Local file. Need to upload it to the server.
 
-				HttpResponseMessage msg = client.PostAsync(Resources.ServiceVersion + "/detector/create", content).Result;
+					using (var content = new MultipartFormDataContent("Upload----" + DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)))
+					{
+						using (FileStream stream = File.OpenRead(url))
+						{
+							content.Add(new StreamContent(stream, (int)stream.Length), "document", Path.GetFileName(url));
+							msg = client.PostAsync(Resources.ServiceVersion + "/detector/create-by-file", content).Result;
+						}
+					}
+				}
+				else
+				{
+					// Internet path. Just submit it to the server.
+					HttpContent content = new StringContent(
+						JsonConvert.SerializeObject(req),
+						Encoding.UTF8,
+						ContentType.Json);
+					msg = client.PostAsync(Resources.ServiceVersion + "/detector/create-by-url", content).Result;
+				}
 
 				if (!msg.IsSuccessStatusCode)
 				{
