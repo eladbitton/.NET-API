@@ -20,7 +20,9 @@ namespace Copyleaks.SDK.SampleCode
 			Scanner scanner = new Scanner(username, APIKey);
 			try
 			{
-				var results = scanner.Scan(url_to_scan);
+				var results = scanner.ScanUrl(url_to_scan);
+				// Another scanning option --> scanner.ScanLocalTextualFile(file)
+
 				if (results.Length == 0)
 				{
 					Console.WriteLine("\tNo results.");

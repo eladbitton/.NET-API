@@ -25,11 +25,11 @@ namespace Copyleaks.SDK.SampleCode
 			this.Token = UsersAuthentication.Login(username, APIKey); // This security token can be use multiple times, until it will be expired (48 hours).
 		}
 
-		public ResultRecord[] Scan(Uri url)
+		public ResultRecord[] ScanUrl(Uri url)
 		{
 			// Create a new process on server.
 			Detector detector = new Detector(this.Token);
-			ScannerProcess process = detector.CreateByUrl(url.AbsoluteUri);
+			ScannerProcess process = detector.CreateByUrl(url);
 
 			// Waiting to process to be finished.
 			while (!process.IsCompleted())
@@ -39,7 +39,7 @@ namespace Copyleaks.SDK.SampleCode
 			return process.GetResults();
 		}
 
-		public ResultRecord[] Scan(FileInfo file)
+		public ResultRecord[] ScanLocalTextualFile(FileInfo file)
 		{
 			// Create a new process on server.
 			Detector detector = new Detector(this.Token);

@@ -61,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Detector.cs" />
-    <Compile Include="ContentType.cs" />
+    <Compile Include="HttpContentTypes.cs" />
     <Compile Include="Exceptions\CommandFailedException.cs" />
     <Compile Include="Exceptions\TokenExpiredException.cs" />
     <Compile Include="Extentions\AssemblyHelper.cs" />

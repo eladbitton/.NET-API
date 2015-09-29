@@ -42,7 +42,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.SecurityToken);
 
 				HttpResponseMessage msg = await client.GetAsync(string.Format("{0}/detector/{1}/status", Resources.ServiceVersion, this.PID));
 				if (!msg.IsSuccessStatusCode)
@@ -73,7 +73,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.SecurityToken);
 
 				HttpResponseMessage msg = client.GetAsync(string.Format("{0}/detector/{1}/status", Resources.ServiceVersion, this.PID)).Result;
 				if (!msg.IsSuccessStatusCode)
@@ -106,7 +106,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.SecurityToken);
 
 				HttpResponseMessage msg = await client.GetAsync(string.Format("{0}/detector/{1}/result", Resources.ServiceVersion, this.PID));
 				if (!msg.IsSuccessStatusCode)
@@ -135,7 +135,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.SecurityToken);
 
 				HttpResponseMessage msg = client.GetAsync(string.Format("{0}/detector/{1}/result", Resources.ServiceVersion, this.PID)).Result;
 				if (!msg.IsSuccessStatusCode)
@@ -165,7 +165,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.SecurityToken);
 
 				HttpResponseMessage msg = await client.DeleteAsync(string.Format("detector/{0}/delete", this.PID));
 				if (!msg.IsSuccessStatusCode)
@@ -183,7 +183,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.SecurityToken);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.SecurityToken);
 
 				HttpResponseMessage msg = client.DeleteAsync(string.Format("detector/{0}/delete", this.PID)).Result;
 				if (!msg.IsSuccessStatusCode)

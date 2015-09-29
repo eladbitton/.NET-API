@@ -39,7 +39,7 @@ namespace Copyleaks.SDK.API
 			LoginToken token;
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.UrlEncoded);
+				client.SetCopyleaksClient(HttpContentTypes.UrlEncoded);
 				HttpResponseMessage msg = client.PostAsync(LOGIN_PAGE, new FormUrlEncodedContent(new[] 
 					{
 						new KeyValuePair<string, string>("username", username),
@@ -80,7 +80,7 @@ namespace Copyleaks.SDK.API
 			LoginToken token;
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.UrlEncoded);
+				client.SetCopyleaksClient(HttpContentTypes.UrlEncoded);
 				HttpResponseMessage msg = await client.PostAsync(LOGIN_PAGE, new FormUrlEncodedContent(new[] 
 					{
 						new KeyValuePair<string, string>("username", username),
@@ -119,8 +119,8 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.UrlEncoded);
-				client.SetCopyleaksClient(ContentType.Json, token);
+				client.SetCopyleaksClient(HttpContentTypes.UrlEncoded);
+				client.SetCopyleaksClient(HttpContentTypes.Json, token);
 
 				HttpResponseMessage msg = client.GetAsync(string.Format("{0}/account/count-credits", Resources.ServiceVersion)).Result;
 				if (!msg.IsSuccessStatusCode)
@@ -155,7 +155,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, token);
+				client.SetCopyleaksClient(HttpContentTypes.Json, token);
 
 				HttpResponseMessage msg = await client.GetAsync(string.Format("{0}/account/count-credits", Resources.ServiceVersion));
 				if (!msg.IsSuccessStatusCode)

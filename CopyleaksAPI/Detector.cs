@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Copyleaks.SDK.API.Exceptions;
 using Copyleaks.SDK.API.Extentions;
-using Copyleaks.SDK.API.Models;
 using Copyleaks.SDK.API.Models.Requests;
 using Copyleaks.SDK.API.Models.Responses;
 using Copyleaks.SDK.API.Properties;
@@ -41,7 +37,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.Token);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.Token);
 
 				CreateCommandRequest req = new CreateCommandRequest() { URL = url };
 
@@ -66,7 +62,7 @@ namespace Copyleaks.SDK.API
 					HttpContent content = new StringContent(
 						JsonConvert.SerializeObject(req),
 						Encoding.UTF8,
-						ContentType.Json);
+						HttpContentTypes.Json);
 					msg = client.PostAsync(Resources.ServiceVersion + "/detector/create-by-url", content).Result;
 				}
 
@@ -90,28 +86,32 @@ namespace Copyleaks.SDK.API
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="url"></param>
-		/// <exception cref="UnauthorizedAccessException"></exception>
+		/// <param name="url">The url of the content to scan</param>
+		/// <exception cref="UnauthorizedAccessException">When security-token is undefined or expired</exception>
+		/// <exception cref="ArgumentOutOfRangeException">When the input url schema is diffrent then HTTP and HTTPS</exception>
 		/// <returns></returns>
-		public ScannerProcess CreateByUrl(string url)
+		public ScannerProcess CreateByUrl(Uri url)
 		{
 			if (this.Token == null)
 				throw new UnauthorizedAccessException("Empty token!");
 			else
 				this.Token.Validate();
 
+			if (url.Scheme != "http" && url.Scheme != "https")
+				throw new ArgumentOutOfRangeException(nameof(url), "Allowed protocols: HTTP, HTTPS");
+
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.Token);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.Token);
 
-				CreateCommandRequest req = new CreateCommandRequest() { URL = url };
+				CreateCommandRequest req = new CreateCommandRequest() { URL = url.AbsoluteUri };
 
 				HttpResponseMessage msg;
 				// Internet path. Just submit it to the server.
 				HttpContent content = new StringContent(
 					JsonConvert.SerializeObject(req),
 					Encoding.UTF8,
-					ContentType.Json);
+					HttpContentTypes.Json);
 				msg = client.PostAsync(Resources.ServiceVersion + "/detector/create-by-url", content).Result;
 
 				if (!msg.IsSuccessStatusCode)
@@ -149,7 +149,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.Token);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.Token);
 
 				CreateCommandRequest req = new CreateCommandRequest()
 				{
@@ -201,7 +201,7 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(ContentType.Json, this.Token);
+				client.SetCopyleaksClient(HttpContentTypes.Json, this.Token);
 
 				CreateCommandRequest req = new CreateCommandRequest()
 				{
