@@ -13,11 +13,26 @@ namespace Copyleaks.SDK.SampleCode
 		const int ISCOMPLETED_SLEEP = 2000;
 
 		public string Username { get; set; }
-		
+
 		public string ApiKey { get; set; }
-		
+
 		protected LoginToken Token { get; set; }
-	
+
+		public uint Credits
+		{
+			get
+			{
+				if (this.Token == null)
+					throw new UnauthorizedAccessException();
+				else
+					this.Token.Validate();
+
+				return UsersAuthentication.CountCredits(this.Token);
+			}
+
+		}
+
+
 		#endregion
 
 		public Scanner(string username, string APIKey)

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Threading;
-using Copyleaks.SDK.API;
+using System.IO;
 using Copyleaks.SDK.API.Exceptions;
+using Copyleaks.SDK.API.Models;
 
 namespace Copyleaks.SDK.SampleCode
 {
@@ -9,19 +9,57 @@ namespace Copyleaks.SDK.SampleCode
 	{
 		static void Main(string[] args)
 		{
-			// For more information, visit Copyleaks How-To page: https://api.copyleaks.com/Guides/HowToUse
+			// Usage:
+			// SampleCode.exe -u "Your Account Username" -k "Your Account Key" --url "http://site.com/your-webpage"
+			// OR 
+			// SampleCode.exe -u "Your Account Username" -k "Your Account Key" --local-document "C:\your-directory\document.doc"
 
+			CommandLineOptions options = new CommandLineOptions();
+			if (!CommandLine.Parser.Default.ParseArguments(args, options))
+				Environment.Exit(1);
+			else if ((options.URL == null && options.LocalFile == null) || (options.URL != null && options.LocalFile != null))
+			{
+				Console.WriteLine("Error: Exactly one input must be specified: 'url' or 'local-document'. Use '--help' for more information.");
+				Environment.Exit(1);
+			}
+
+			// For more information, visit Copyleaks "How-To page": https://api.copyleaks.com/Guides/HowToUse
 			// Creating Copyleaks account: https://copyleaks.com/Account/Signup
-			// Use your account information:
-			string username = "<Username>";
-			string APIKey = "<API KEY>"; // Generate your API Key: https://copyleaks.com/Account/Manage
+			// Use your Copyleaks account information.
+			// Generate your Account API Key: https://copyleaks.com/Account/Manage
 
-			Uri url_to_scan = new Uri("http://www.website.com/document-to-scan"); // Allowed formats: html, pdf, doc, docx, rtf, txt ...
-			Scanner scanner = new Scanner(username, APIKey);
+			Scanner scanner = new Scanner(options.Username, options.ApiKey);
+			uint creditsBalance = scanner.Credits;
+			if (creditsBalance == 0)
+			{
+				Console.WriteLine("ERROR: You have insufficient credits for scanning content! (current credits balance = {0})", creditsBalance);
+				Environment.Exit(2);
+			}
+
 			try
 			{
-				var results = scanner.ScanUrl(url_to_scan);
-				// Another scanning option --> scanner.ScanLocalTextualFile(file)
+				ResultRecord[] results;
+				if (options.URL != null)
+				{
+					Uri uri;
+					if (!Uri.TryCreate(options.URL, UriKind.Absolute, out uri))
+					{
+						Console.WriteLine("ERROR: The URL ('{0}') is invalid!", options.URL); // Bad URL format.
+						Environment.Exit(1);
+					}
+
+					results = scanner.ScanUrl(uri);
+				}
+				else
+				{
+					if (!File.Exists(options.LocalFile))
+					{
+						Console.WriteLine("ERROR: The file '{0}' is not exists!", options.LocalFile); // Bad URL format.
+						Environment.Exit(1);
+					}
+
+					results = scanner.ScanLocalTextualFile(new FileInfo(options.LocalFile));
+				}
 
 				if (results.Length == 0)
 				{
@@ -58,6 +96,8 @@ namespace Copyleaks.SDK.SampleCode
 				Console.WriteLine("Unhandled Exception");
 				Console.WriteLine(ex);
 			}
+
+			Environment.Exit(0);
 		}
 	}
 }

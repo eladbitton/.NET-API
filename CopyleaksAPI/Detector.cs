@@ -151,11 +151,6 @@ namespace Copyleaks.SDK.API
 			{
 				client.SetCopyleaksClient(HttpContentTypes.Json, this.Token);
 
-				CreateCommandRequest req = new CreateCommandRequest()
-				{
-					URL = localfile.FullName
-				};
-
 				HttpResponseMessage msg;
 				// Local file. Need to upload it to the server.
 

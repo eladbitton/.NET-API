@@ -122,7 +122,7 @@
     <comment>In Milliseconds. Wait up to 10 minutes to response.</comment>
   </data>
   <data name="ServiceEntryPoint" xml:space="preserve">
-    <value>https://api.copyleaks.com/</value>
+    <value>https://api.copyleaks.com</value>
     <comment>Service URL</comment>
   </data>
   <data name="ServiceVersion" xml:space="preserve">

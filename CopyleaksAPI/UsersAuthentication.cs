@@ -40,7 +40,7 @@ namespace Copyleaks.SDK.API
 			using (HttpClient client = new HttpClient())
 			{
 				client.SetCopyleaksClient(HttpContentTypes.UrlEncoded);
-				HttpResponseMessage msg = client.PostAsync(LOGIN_PAGE, new FormUrlEncodedContent(new[] 
+				HttpResponseMessage msg = client.PostAsync(LOGIN_PAGE, new FormUrlEncodedContent(new[]
 					{
 						new KeyValuePair<string, string>("username", username),
 						new KeyValuePair<string, string>("apikey", apiKey)
@@ -81,7 +81,7 @@ namespace Copyleaks.SDK.API
 			using (HttpClient client = new HttpClient())
 			{
 				client.SetCopyleaksClient(HttpContentTypes.UrlEncoded);
-				HttpResponseMessage msg = await client.PostAsync(LOGIN_PAGE, new FormUrlEncodedContent(new[] 
+				HttpResponseMessage msg = await client.PostAsync(LOGIN_PAGE, new FormUrlEncodedContent(new[]
 					{
 						new KeyValuePair<string, string>("username", username),
 						new KeyValuePair<string, string>("apikey", apiKey)
@@ -110,7 +110,7 @@ namespace Copyleaks.SDK.API
 			return token;
 		}
 
-		public static int CountCredits(LoginToken token)
+		public static uint CountCredits(LoginToken token)
 		{
 			token.Validate();
 
@@ -146,7 +146,7 @@ namespace Copyleaks.SDK.API
 			}
 		}
 
-		public static async Task<int> CountCreditsAsync(LoginToken token)
+		public static async Task<uint> CountCreditsAsync(LoginToken token)
 		{
 			token.Validate();
 

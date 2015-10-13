@@ -70,7 +70,7 @@ namespace Copyleaks.SDK.API.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://api.copyleaks.com/.
+        ///   Looks up a localized string similar to https://api.copyleaks.com.
         /// </summary>
         internal static string ServiceEntryPoint {
             get {
