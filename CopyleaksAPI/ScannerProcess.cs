@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Copyleaks.SDK.API.Exceptions;
+using Copyleaks.SDK.API.Extentions;
+using Copyleaks.SDK.API.Helpers;
 using Copyleaks.SDK.API.Models;
 using Copyleaks.SDK.API.Models.Responses;
-using Copyleaks.SDK.API.Extentions;
-using Newtonsoft.Json;
 using Copyleaks.SDK.API.Properties;
+using Newtonsoft.Json;
 
 namespace Copyleaks.SDK.API
 {
@@ -75,7 +71,12 @@ namespace Copyleaks.SDK.API
 			{
 				client.SetCopyleaksClient(HttpContentTypes.Json, this.SecurityToken);
 
-				HttpResponseMessage msg = client.GetAsync(string.Format("{0}/detector/{1}/status", Resources.ServiceVersion, this.PID)).Result;
+				HttpResponseMessage msg;
+				msg = Retry.Http<HttpResponseMessage>(
+					() => client.GetAsync(string.Format("{0}/detector/{1}/status", Resources.ServiceVersion, this.PID)).Result,
+					TimeSpan.FromSeconds(3), 
+					3);
+
 				if (!msg.IsSuccessStatusCode)
 				{
 					string errorResponse = msg.Content.ReadAsStringAsync().Result;

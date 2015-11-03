@@ -119,7 +119,6 @@ namespace Copyleaks.SDK.API
 
 			using (HttpClient client = new HttpClient())
 			{
-				client.SetCopyleaksClient(HttpContentTypes.UrlEncoded);
 				client.SetCopyleaksClient(HttpContentTypes.Json, token);
 
 				HttpResponseMessage msg = client.GetAsync(string.Format("{0}/account/count-credits", Resources.ServiceVersion)).Result;

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SampleCode")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("C# SDK")]
+[assembly: AssemblyDescription("The official Copyleaks SDK to start using Copyleaks services")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SampleCode")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("Copyleaks")]
+[assembly: AssemblyProduct("Copyleaks c# SDK")]
+[assembly: AssemblyCopyright("Copyrights © 2015 Copyleaks. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

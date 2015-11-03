@@ -10,7 +10,7 @@ namespace Copyleaks.SDK.SampleCode
 	{
 		#region Members & Properties
 
-		const int ISCOMPLETED_SLEEP = 2000;
+		const int ISCOMPLETED_SLEEP = 5000;
 
 		public string Username { get; set; }
 
@@ -40,11 +40,11 @@ namespace Copyleaks.SDK.SampleCode
 			this.Token = UsersAuthentication.Login(username, APIKey); // This security token can be use multiple times, until it will be expired (48 hours).
 		}
 
-		public ResultRecord[] ScanUrl(Uri url)
+		public ResultRecord[] ScanUrl(Uri url, Uri httpCallback = null)
 		{
 			// Create a new process on server.
 			Detector detector = new Detector(this.Token);
-			ScannerProcess process = detector.CreateByUrl(url);
+			ScannerProcess process = detector.CreateByUrl(url, httpCallback);
 
 			// Waiting to process to be finished.
 			while (!process.IsCompleted())
@@ -54,11 +54,11 @@ namespace Copyleaks.SDK.SampleCode
 			return process.GetResults();
 		}
 
-		public ResultRecord[] ScanLocalTextualFile(FileInfo file)
+		public ResultRecord[] ScanLocalTextualFile(FileInfo file, Uri httpCallback = null)
 		{
 			// Create a new process on server.
 			Detector detector = new Detector(this.Token);
-			ScannerProcess process = detector.CreateByFile(file);
+			ScannerProcess process = detector.CreateByFile(file, httpCallback);
 
 			// Waiting to process to be finished.
 			while (!process.IsCompleted())

@@ -90,7 +90,7 @@ namespace Copyleaks.SDK.API
 		/// <exception cref="UnauthorizedAccessException">When security-token is undefined or expired</exception>
 		/// <exception cref="ArgumentOutOfRangeException">When the input url schema is diffrent then HTTP and HTTPS</exception>
 		/// <returns></returns>
-		public ScannerProcess CreateByUrl(Uri url)
+		public ScannerProcess CreateByUrl(Uri url, Uri httpCallback = null)
 		{
 			if (this.Token == null)
 				throw new UnauthorizedAccessException("Empty token!");
@@ -112,6 +112,10 @@ namespace Copyleaks.SDK.API
 					JsonConvert.SerializeObject(req),
 					Encoding.UTF8,
 					HttpContentTypes.Json);
+
+				if (httpCallback != null)
+					client.DefaultRequestHeaders.Add("Http-Callback", httpCallback.AbsoluteUri); // Add HTTP callback to the request header.
+
 				msg = client.PostAsync(Resources.ServiceVersion + "/detector/create-by-url", content).Result;
 
 				if (!msg.IsSuccessStatusCode)
@@ -137,7 +141,7 @@ namespace Copyleaks.SDK.API
 		/// <param name="localfile"></param>
 		/// <exception cref="UnauthorizedAccessException"></exception>
 		/// <returns></returns>
-		public ScannerProcess CreateByFile(FileInfo localfile)
+		public ScannerProcess CreateByFile(FileInfo localfile, Uri httpCallback = null)
 		{
 			if (this.Token == null)
 				throw new UnauthorizedAccessException("Empty token!");
@@ -153,6 +157,9 @@ namespace Copyleaks.SDK.API
 
 				HttpResponseMessage msg;
 				// Local file. Need to upload it to the server.
+
+				if (httpCallback != null)
+					client.DefaultRequestHeaders.Add("Http-Callback", httpCallback.AbsoluteUri); // Add HTTP callback to the request header.
 
 				using (var content = new MultipartFormDataContent("Upload----" + DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)))
 				using (FileStream stream = localfile.OpenRead())
@@ -184,7 +191,7 @@ namespace Copyleaks.SDK.API
 		/// <param name="localfile"></param>
 		/// <exception cref="UnauthorizedAccessException"></exception>
 		/// <returns></returns>
-		public ScannerProcess CreateByOcr(FileInfo localfile)
+		public ScannerProcess CreateByOcr(FileInfo localfile, Uri httpCallback = null)
 		{
 			if (this.Token == null)
 				throw new UnauthorizedAccessException("Empty token!");
@@ -202,6 +209,9 @@ namespace Copyleaks.SDK.API
 				{
 					URL = localfile.FullName
 				};
+
+				if (httpCallback != null)
+					client.DefaultRequestHeaders.Add("Http-Callback", httpCallback.AbsoluteUri); // Add HTTP callback to the request header.
 
 				HttpResponseMessage msg;
 				// Local file. Need to upload it to the server.

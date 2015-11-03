@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Detector.cs" />
+    <Compile Include="Extentions\TypesArrayExceptionExtention.cs" />
+    <Compile Include="Helpers\Retry.cs" />
     <Compile Include="HttpContentTypes.cs" />
     <Compile Include="Exceptions\CommandFailedException.cs" />
     <Compile Include="Exceptions\TokenExpiredException.cs" />
@@ -93,7 +95,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="tools\Install.ps1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="lib\" />

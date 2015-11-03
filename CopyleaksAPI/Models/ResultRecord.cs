@@ -9,9 +9,6 @@ namespace Copyleaks.SDK.API.Models
 {
 	public class ResultRecord
 	{
-		[JsonProperty(PropertyName = "Domain")]
-		public string Domain { get; private set; }
-
 		[JsonProperty(PropertyName = "URL")]
 		public string URL { get; private set; }
 
